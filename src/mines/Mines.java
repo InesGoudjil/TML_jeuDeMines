@@ -13,7 +13,7 @@ public class Mines extends JFrame {
     private final int WIDTH = 250;
     private final int HEIGHT = 290;
 
-    private JLabel statusbar;
+    private JLabel statusBar;
 
     public Mines() {
 
@@ -21,9 +21,9 @@ public class Mines extends JFrame {
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setTitle("Minesweeper");
-        statusbar = new JLabel("");
-        add(statusbar, BorderLayout.SOUTH);
-        add(new Board(statusbar));
+        statusBar = new JLabel("");
+        add(statusBar, BorderLayout.SOUTH);
+        add(new Board(statusBar));
         setResizable(false);
         setVisible(true);
     }
