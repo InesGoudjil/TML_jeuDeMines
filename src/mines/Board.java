@@ -288,7 +288,6 @@ public class Board extends JPanel {
                         (i * CELL_SIZE), this);
             }
         }
-
         // Si toutes les cellules ont été découvertes et que la partie est en cours,
         // alors la partie est gagnée
         if (uncover == 0 && inGame) {
