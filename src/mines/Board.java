@@ -10,12 +10,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
-	private static final long serialVersionUID = 6195235521361212179L;
-	
-	public final int NUM_IMAGES = 13;
+    private static final long serialVersionUID = 6195235521361212179L;
+
+    public final int NUM_IMAGES = 13;
     public final int CELL_SIZE = 15;
     public final int COVER_FOR_CELL = 10;
-    public final int MARK_FOR_CELL = 10;    
+    public final int MARK_FOR_CELL = 10;
     public final int EMPTY_CELL = 0;
     public final int MINE_CELL = 9;
     public final int COVERED_MINE_CELL = MINE_CELL + COVER_FOR_CELL;
@@ -27,7 +27,7 @@ public class Board extends JPanel {
 
     public int[] field;
     public boolean inGame;
-    public  int mines_left;
+    public int minesLeft;
     public Image[] img;
     public int mines = 40;
     public int rows = 16;
@@ -38,13 +38,12 @@ public class Board extends JPanel {
     public Board(JLabel statusbar) {
 
         this.statusbar = statusbar;
-		
+
         img = new Image[NUM_IMAGES];
-		
+
         for (int i = 0; i < NUM_IMAGES; i++) {
-			img[i] =
-                    (new ImageIcon(getClass().getClassLoader().getResource((i)
-            			    + ".gif"))).getImage();
+            img[i] = (new ImageIcon(getClass().getClassLoader().getResource((i)
+                    + ".gif"))).getImage();
         }
         setDoubleBuffered(true);
         addMouseListener(new MinesAdapter(this));
@@ -54,69 +53,69 @@ public class Board extends JPanel {
     public void newGame() {
         Random random = new Random();
         int currentCol, i = 0, position = 0, cell = 0;
-    
+
         inGame = true;
-        mines_left = mines;
+        minesLeft = mines;
         all_cells = rows * cols;
         field = new int[all_cells];
-    
+
         // initialize the cells
         for (i = 0; i < all_cells; i++) {
             field[i] = COVER_FOR_CELL;
         }
-    
+
         // update the status bar
-        statusbar.setText(Integer.toString(mines_left));
-    
+        statusbar.setText(Integer.toString(minesLeft));
+
         // randomly place the mines
         i = 0;
         while (i < mines) {
             position = (int) (all_cells * random.nextDouble());
-    
+
             if ((position < all_cells) && (field[position] != COVERED_MINE_CELL)) {
                 currentCol = position % cols;
                 field[position] = COVERED_MINE_CELL;
                 i++;
-    
+
                 // update the cells surrounding the mine
-                if (currentCol > 0) { 
+                if (currentCol > 0) {
                     cell = position - 1 - cols;
                     if (cell >= 0 && field[cell] != COVERED_MINE_CELL) {
                         field[cell] += 1;
                     }
-    
+
                     cell = position - 1;
                     if (cell >= 0 && field[cell] != COVERED_MINE_CELL) {
                         field[cell] += 1;
                     }
-    
+
                     cell = position + cols - 1;
                     if (cell < all_cells && field[cell] != COVERED_MINE_CELL) {
                         field[cell] += 1;
                     }
                 }
-    
+
                 cell = position - cols;
                 if (cell >= 0 && field[cell] != COVERED_MINE_CELL) {
                     field[cell] += 1;
                 }
-    
+
                 cell = position + cols;
                 if (cell < all_cells && field[cell] != COVERED_MINE_CELL) {
                     field[cell] += 1;
                 }
-    
+
                 if (currentCol < (cols - 1)) {
                     cell = position - cols + 1;
                     if (cell >= 0 && field[cell] != COVERED_MINE_CELL) {
                         field[cell] += 1;
                     }
-    
+
                     cell = position + cols + 1;
                     if (cell < all_cells && field[cell] != COVERED_MINE_CELL) {
                         field[cell] += 1;
                     }
-    
+
                     cell = position + 1;
                     if (cell < all_cells && field[cell] != COVERED_MINE_CELL) {
                         field[cell] += 1;
@@ -125,34 +124,33 @@ public class Board extends JPanel {
             }
         }
     }
-    
 
-    public void find_empty_cells(int j) {
+    public void findEmptyCells(int j) {
 
         int current_col = j % cols;
         int cell;
 
-        if (current_col > 0) { 
+        if (current_col > 0) {
             cell = j - cols - 1;
             if (cell >= 0)
                 if (field[cell] > MINE_CELL) {
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL)
-                        find_empty_cells(cell);
+                        findEmptyCells(cell);
                 }
             cell = j - 1;
             if (cell >= 0)
                 if (field[cell] > MINE_CELL) {
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL)
-                        find_empty_cells(cell);
+                        findEmptyCells(cell);
                 }
             cell = j + cols - 1;
             if (cell < all_cells)
                 if (field[cell] > MINE_CELL) {
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL)
-                        find_empty_cells(cell);
+                        findEmptyCells(cell);
                 }
         }
         cell = j - cols;
@@ -160,14 +158,14 @@ public class Board extends JPanel {
             if (field[cell] > MINE_CELL) {
                 field[cell] -= COVER_FOR_CELL;
                 if (field[cell] == EMPTY_CELL)
-                    find_empty_cells(cell);
+                    findEmptyCells(cell);
             }
         cell = j + cols;
         if (cell < all_cells)
             if (field[cell] > MINE_CELL) {
                 field[cell] -= COVER_FOR_CELL;
                 if (field[cell] == EMPTY_CELL)
-                    find_empty_cells(cell);
+                    findEmptyCells(cell);
             }
         if (current_col < (cols - 1)) {
             cell = j - cols + 1;
@@ -175,21 +173,21 @@ public class Board extends JPanel {
                 if (field[cell] > MINE_CELL) {
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL)
-                        find_empty_cells(cell);
+                        findEmptyCells(cell);
                 }
             cell = j + cols + 1;
             if (cell < all_cells)
                 if (field[cell] > MINE_CELL) {
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL)
-                        find_empty_cells(cell);
+                        findEmptyCells(cell);
                 }
             cell = j + 1;
             if (cell < all_cells)
                 if (field[cell] > MINE_CELL) {
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL)
-                        find_empty_cells(cell);
+                        findEmptyCells(cell);
                 }
         }
     }
@@ -226,7 +224,7 @@ public class Board extends JPanel {
                     }
                 }
                 g.drawImage(img[cell], (j * CELL_SIZE),
-                    (i * CELL_SIZE), this);
+                        (i * CELL_SIZE), this);
             }
         }
 
@@ -237,5 +235,4 @@ public class Board extends JPanel {
             statusbar.setText("Game lost");
     }
 
-    
 }

@@ -35,17 +35,17 @@ public class MinesAdapter extends MouseAdapter {
                     rep = true;
 
                     if (board.field[(cRow * board.cols) + cCol] <= board.COVERED_MINE_CELL) {
-                        if (board.mines_left > 0) {
+                        if (board.minesLeft > 0) {
                             board.field[(cRow * board.cols) + cCol] += board.MARK_FOR_CELL;
-                            board.mines_left--;
-                            board.statusbar.setText(Integer.toString(board.mines_left));
+                            board.minesLeft--;
+                            board.statusbar.setText(Integer.toString(board.minesLeft));
                         } else
                             board.statusbar.setText("No marks left");
                     } else {
 
                         board.field[(cRow * board.cols) + cCol] -= board.MARK_FOR_CELL;
-                        board.mines_left++;
-                        board.statusbar.setText(Integer.toString(board.mines_left));
+                        board.minesLeft++;
+                        board.statusbar.setText(Integer.toString(board.minesLeft));
                     }
                 }
 
@@ -64,7 +64,7 @@ public class MinesAdapter extends MouseAdapter {
                     if (board.field[(cRow * board.cols) + cCol] == board.MINE_CELL)
                         board.inGame = false;
                     if (board.field[(cRow * board.cols) + cCol] == board.EMPTY_CELL)
-                        board.find_empty_cells((cRow * board.cols) + cCol);
+                        board.findEmptyCells((cRow * board.cols) + cCol);
                 }
             }
 
